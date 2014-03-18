@@ -1,4 +1,4 @@
-(defproject puppetlabs/typesafe-config "0.1.1-SNAPSHOT"
+(defproject puppetlabs/typesafe-config "0.1.1"
   :description "Thin Clojure wrapper around Typesafe Config library"
   :license {:name "Apache License, Version 2.0"
             :url "http://www.apache.org/licenses/LICENSE-2.0.html"}

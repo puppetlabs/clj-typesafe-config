@@ -91,7 +91,7 @@
 
 (defn reader->map
   "Given any clojure object that is suitable for use with `reader`, parse the
-  configuration data and return clojure map representation of the data.
+  configuration data and return a clojure map representation of the data.
 
   Optional `format` arg may be one of `:conf`, `:json`, or `:properties`, to
   specify the configuration format.  Defaults to `:conf`."

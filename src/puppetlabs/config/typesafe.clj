@@ -1,6 +1,7 @@
 (ns puppetlabs.config.typesafe
   (:import (java.util Map List)
-           (com.typesafe.config ConfigFactory))
+           (com.typesafe.config ConfigFactory ConfigParseOptions ConfigSyntax
+                                Config))
   (:require [clojure.java.io :as io]
             [puppetlabs.kitchensink.core :as ks]))
 
@@ -65,19 +66,49 @@
     ;; Any other types we need to treat specially here?
     :else v))
 
+(defn config->map
+  "Converts an instance of `Config` to a more user-friendly clojure map"
+  [config]
+  {:pre [(instance? Config config)]
+   :post [(map? %)]}
+  (-> config
+      .root
+      .unwrapped
+      nested-java-map->map))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Public
 
 (defn config-file->map
   "Given the path to a configuration file (of type .conf, .json, or .properties),
-  parse the file and return a map suitable for use in our internal configuration
-  representation."
+  parse the file and return a clojure map representation of the data."
   [file-path]
   {:pre [(string? file-path)]
    :post [(map? %)]}
   (-> (io/file file-path)
       (ConfigFactory/parseFileAnySyntax)
-      (.root)
-      (.unwrapped)
-      (nested-java-map->map)))
+      config->map))
+
+(defn reader->map
+  "Given any clojure object that is suitable for use with `reader`, parse the
+  configuration data and return a clojure map representation of the data.
+
+  Optional `format` arg may be one of `:conf`, `:json`, or `:properties`, to
+  specify the configuration format.  Defaults to `:conf`."
+  ([input]
+   (reader->map input :conf))
+  ([input format]
+   {:pre [(satisfies? io/IOFactory input)
+          (contains? #{:conf :json :properties} format)]
+    :post [(map? %)]}
+   (let [parse-options (ConfigParseOptions/defaults)]
+     (.setSyntax
+       parse-options
+       (condp = format
+         :conf ConfigSyntax/CONF
+         :json ConfigSyntax/JSON
+         :properties ConfigSyntax/PROPERTIES))
+     (-> (io/reader input)
+         (ConfigFactory/parseReader parse-options)
+         config->map))))
 

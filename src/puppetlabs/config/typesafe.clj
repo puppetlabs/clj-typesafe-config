@@ -2,8 +2,7 @@
   (:import (java.util Map List)
            (com.typesafe.config ConfigFactory ConfigParseOptions ConfigSyntax
                                 Config))
-  (:require [clojure.java.io :as io]
-            [puppetlabs.kitchensink.core :as ks]))
+  (:require [clojure.java.io :as io]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Private
@@ -23,6 +22,16 @@
     (.substring s 1 (dec (.length s)))
     s))
 
+(defn- parse-int
+  "Parse a string `s` as an integer, returning nil if the string doesn't
+  contain an integer."
+  [s]
+  {:pre  [(string? s)]
+   :post [(or (integer? %) (nil? %))]}
+  (try (Integer/parseInt s)
+    (catch java.lang.NumberFormatException e
+      nil)))
+
 (defn string->val
   "Given a string read from a config file, convert it to the corresponding value
   that we will use for our internal configuration data.  This includes removing
@@ -31,7 +40,7 @@
   {:pre [(string? s)]
    :post [((some-fn string? integer?) %)]}
   (let [v (strip-quotes s)]
-    (or (ks/parse-int v) v)))
+    (or (parse-int v) v)))
 
 (defn nested-java-map->map
   "Given a (potentially nested) java Map object read from a config file,

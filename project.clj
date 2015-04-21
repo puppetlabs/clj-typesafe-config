@@ -9,8 +9,7 @@
   :pedantic? :abort
 
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [com.typesafe/config "1.2.0"]
-                 [puppetlabs/kitchensink "0.5.3"]]
+                 [com.typesafe/config "1.2.0"]]
 
   :plugins [[lein-release "1.0.5"]]
 

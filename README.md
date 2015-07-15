@@ -10,3 +10,7 @@ A thin clojure wrapper around the [Typesafe Config](https://github.com/typesafeh
 Add the following dependency to your `project.clj` file:
 
 [![Clojars Project](http://clojars.org/puppetlabs/typesafe-config/latest-version.svg)](http://clojars.org/puppetlabs/typesafe-config)
+
+## Support
+
+Please log tickets and issues at our [Jira Tracker](https://tickets.puppetlabs.com/issues/?jql=project%20%3D%20Trapperkeeper).

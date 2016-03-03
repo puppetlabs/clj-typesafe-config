@@ -81,6 +81,7 @@
   {:pre [(instance? Config config)]
    :post [(map? %)]}
   (-> config
+      .resolve
       .root
       .unwrapped
       nested-java-map->map))

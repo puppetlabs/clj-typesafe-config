@@ -28,7 +28,13 @@
                     :bam 42
                     :bap {:boozle "boozleboozle"
                           :bip [1 2 {:hi "there"} 3]}}}
+             cfg))))
+  (testing "can parse .conf file with substitution variables"
+    (let [cfg (ts/config-file->map (str test-files-dir "substitution.conf"))]
+      (is (= {:top {:henry "text"
+                    :bob "text"}}
              cfg)))))
+
 
 (deftest reader->map-test
   (testing "can parse .properties stream with nested data structures"
@@ -59,5 +65,13 @@
                     :bam 42
                     :bap {:boozle "boozleboozle"
                           :bip [1 2 {:hi "there"} 3]}}}
+             cfg))))
+  (testing "can parse .conf file with substitution variables"
+    (let [cfg (ts/reader->map
+                (FileInputStream. (str test-files-dir "substitution.conf"))
+                :conf)]
+      (is (= {:top {:henry "text"
+                    :bob "text"}}
              cfg)))))
+
 

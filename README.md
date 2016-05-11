@@ -14,3 +14,9 @@ Add the following dependency to your `project.clj` file:
 ## Support
 
 Please log tickets and issues at our [Jira Tracker](https://tickets.puppetlabs.com/issues/?jql=project%20%3D%20Trapperkeeper).
+
+## Maintainence
+
+Maintainers: Joe Pinsonault <joe.pinsonault@puppet.com>, Chris Price <chris@puppet.com>, Kevin Corcoran <kevin.corcoran@puppet.com>
+
+Tickets: https://tickets.puppetlabs.com/browse/HC

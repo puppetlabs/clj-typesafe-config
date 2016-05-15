@@ -91,7 +91,8 @@
 
 (defn config-file->map
   "Given the path to a configuration file (of type .conf, .json, or .properties),
-  parse the file and return a clojure map representation of the data."
+  parse the file and return a clojure map representation of the data.
+  Returns empty map for non-existing file."
   [file-path]
   {:pre [(string? file-path)]
    :post [(map? %)]}

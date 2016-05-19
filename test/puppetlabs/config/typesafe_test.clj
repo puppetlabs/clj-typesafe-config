@@ -33,6 +33,10 @@
     (let [cfg (ts/config-file->map (str test-files-dir "substitution.conf"))]
       (is (= {:top {:henry "text"
                     :bob "text"}}
+             cfg))))
+  (testing "returns empty result for non-existing file"
+    (let [cfg (ts/config-file->map (str test-files-dir "non-existing-file.conf"))]
+      (is (= {}
              cfg)))))
 
 

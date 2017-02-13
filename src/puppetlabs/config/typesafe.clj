@@ -13,7 +13,7 @@
 (defn strip-quotes
   "Given a string read from a config file, check to see if it begins and ends with
   double-quotes, and if so, remove them."
-  [s]
+  [^String s]
   {:pre [(string? s)]
    :post [(string? %)
           (not (and (.startsWith % "\"")
@@ -46,7 +46,7 @@
 (defn nested-java-map->map
   "Given a (potentially nested) java Map object read from a config file,
   convert it (potentially recursively) to a clojure map with keywordized keys."
-  [m]
+  [^Map m]
   {:pre [(instance? Map m)]
    :post [(map? %)
           (every? keyword? (keys %))]}
@@ -78,7 +78,7 @@
 
 (defn config->map
   "Converts an instance of `Config` to a more user-friendly clojure map"
-  [config]
+  [^Config config]
   {:pre [(instance? Config config)]
    :post [(map? %)]}
   (-> config

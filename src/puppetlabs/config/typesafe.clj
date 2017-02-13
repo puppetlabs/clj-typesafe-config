@@ -1,8 +1,9 @@
 (ns puppetlabs.config.typesafe
   (:import (java.util Map List)
            (com.typesafe.config ConfigFactory ConfigParseOptions ConfigSyntax
-                                Config))
-  (:require [clojure.java.io :as io]))
+                                Config ConfigValueFactory))
+  (:require [clojure.java.io :as io]
+            [clojure.walk :as walk]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Private
@@ -123,3 +124,12 @@
          (ConfigFactory/parseReader parse-options)
          config->map))))
 
+(defn map->string
+  "Serialize the clojure data structure `m` to string using the
+  typesafe config format. `m` is typically the result of a
+  `config-file->map` or `reader-map` with some modifications."
+  [m]
+  (-> m
+      walk/stringify-keys
+      ConfigValueFactory/fromAnyRef
+      .render))

@@ -1,5 +1,5 @@
 (ns puppetlabs.config.typesafe_test
-  (:import (java.io FileInputStream))
+  (:import (java.io FileInputStream StringReader))
   (:require [puppetlabs.config.typesafe :as ts]
             [clojure.test :refer :all]))
 
@@ -39,6 +39,14 @@
       (is (= {}
              cfg)))))
 
+(defn round-trip-config
+  "Converts cfg (clojure representation of a config) to a string, then
+  back to clojure data structures"
+  [cfg]
+  (-> cfg
+      ts/map->string
+      StringReader.
+      ts/reader->map))
 
 (deftest reader->map-test
   (testing "can parse .properties stream with nested data structures"
@@ -49,7 +57,8 @@
                     :baz "bazbaz"
                     :bam 42
                     :bap {:boozle "boozleboozle"}}}
-             cfg))))
+             cfg))
+      (is (= cfg (round-trip-config cfg)))))
   (testing "can parse .json stream with nested data structures"
     (let [cfg (ts/reader->map
                 (FileInputStream. (str test-files-dir "config.json"))
@@ -59,7 +68,8 @@
                     :bam 42
                     :bap {:boozle "boozleboozle"
                           :bip [1 2 {:hi "there"} 3]}}}
-             cfg))))
+             cfg))
+      (is (= cfg (round-trip-config cfg)))))
   (testing "can parse .conf stream with nested data structures"
     (let [cfg (ts/reader->map
                 (FileInputStream. (str test-files-dir "config.conf"))
@@ -69,13 +79,13 @@
                     :bam 42
                     :bap {:boozle "boozleboozle"
                           :bip [1 2 {:hi "there"} 3]}}}
-             cfg))))
+             cfg))
+      (is (= cfg (round-trip-config cfg)))))
   (testing "can parse .conf file with substitution variables"
     (let [cfg (ts/reader->map
                 (FileInputStream. (str test-files-dir "substitution.conf"))
                 :conf)]
       (is (= {:top {:henry "text"
                     :bob "text"}}
-             cfg)))))
-
-
+             cfg))
+      (is (= cfg (round-trip-config cfg))))))
